@@ -1,0 +1,123 @@
+/* =========================
+   🔝 BASE (TOPO)
+========================= */
+
+Table marca {
+  id_marca int [pk, increment]
+  nome_marca varchar
+  pais_origem varchar
+}
+
+Table tipo_peca {
+  id_tipo_peca int [pk, increment]
+  descricao varchar
+}
+
+Table prioridade {
+  id_prioridade int [pk, increment]
+  descricao varchar
+}
+
+Table status {
+  id_status int [pk, increment]
+  descricao varchar
+}
+
+/* =========================
+   🚗 ESTRUTURA DO CARRO
+========================= */
+
+Table modelo_carro {
+  id_modelo int [pk, increment]
+  nome_modelo varchar
+  ano_lancamento int
+  id_marca int
+}
+
+Table cliente {
+  id_cliente int [pk, increment]
+  nome_cliente varchar
+  celular_cliente varchar
+}
+
+Table chassis {
+  id_chassis int [pk, increment]
+  ano_compra int
+  id_modelo int
+  id_cliente int
+}
+
+/* =========================
+   🧾 ORDEM DE SERVIÇO
+========================= */
+
+Table ordens_servico {
+  id_ordem int [pk, increment]
+  data_abertura datetime
+  data_fechamento datetime
+  descricao varchar
+  valor_total decimal
+  id_cliente int
+  id_chassis int
+  id_prioridade int
+  id_status int
+}
+
+/* =========================
+   📦 CATÁLOGO
+========================= */
+
+Table peca {
+  id_peca int [pk, increment]
+  nome_peca varchar
+  preco decimal
+  id_marca int
+  id_tipo_peca int
+}
+
+Table fornecedor {
+  id_fornecedor int [pk, increment]
+  nome varchar
+  cidade varchar
+  telefone varchar
+  site varchar
+}
+
+/* =========================
+   🔗 RELACIONAMENTOS
+========================= */
+
+Ref: modelo_carro.id_marca > marca.id_marca
+
+Ref: chassis.id_modelo > modelo_carro.id_modelo
+Ref: chassis.id_cliente > cliente.id_cliente
+
+Ref: ordens_servico.id_cliente > cliente.id_cliente
+Ref: ordens_servico.id_chassis > chassis.id_chassis
+Ref: ordens_servico.id_prioridade > prioridade.id_prioridade
+Ref: ordens_servico.id_status > status.id_status
+
+Ref: peca.id_marca > marca.id_marca
+Ref: peca.id_tipo_peca > tipo_peca.id_tipo_peca
+
+/* =========================
+   🔻 INTERMEDIÁRIAS (FUNDO)
+========================= */
+
+Table fornecedor_peca {
+  id_fornecedor int
+  id_peca int
+}
+
+Table ordem_peca {
+  id_ordem int
+  id_peca int
+  quantidade int
+  valor_unitario decimal
+}
+
+Ref: fornecedor_peca.id_fornecedor > fornecedor.id_fornecedor
+Ref: fornecedor_peca.id_peca > peca.id_peca
+
+Ref: ordem_peca.id_ordem > ordens_servico.id_ordem
+Ref: ordem_peca.id_peca > peca.id_peca
