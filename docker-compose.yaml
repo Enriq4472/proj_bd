@@ -1,0 +1,16 @@
+services:
+  db:
+    image: docker.io/library/postgres:16
+    container_name: pg_workshop
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=workshop_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data:Z
+    restart: always
+
+volumes:
+  pg_data:
