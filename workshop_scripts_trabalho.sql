@@ -124,7 +124,7 @@ JOIN status s ON os.id_status = s.id_status;
 
 -- criando triggers
 
--- atualiza o numero da os automaticamente
+-- atualiza o valor total da os automaticamente
 CREATE OR REPLACE FUNCTION fn_update_total_order()
 RETURNS TRIGGER AS $$
 BEGIN
